@@ -65,21 +65,24 @@ def login_facebook(driver):
     time.sleep(5)
 
 def download_csv(driver):
-    # Replace with the actual URL of your lead form's download center
-    lead_url = "https://business.facebook.com/latest/leads_center/"
+    lead_url = "https://business.facebook.com/latest/leads_center/?asset_id=569918452860655&business_id=9016010605180123"
     driver.get(lead_url)
     time.sleep(10)
     try:
         download_btn = driver.find_element(By.XPATH, "//div[contains(text(),'Download')]")
-        download_btn.click()
-        time.sleep(2)
-        csv_btn = driver.find_element(By.XPATH, "//span[contains(text(),'CSV')]")
-        csv_btn.click()
-        time.sleep(5)
-        print("✅ CSV Downloaded")
-        return True
+        if download_btn.is_displayed() and download_btn.is_enabled():
+            download_btn.click()
+            time.sleep(2)
+            csv_btn = driver.find_element(By.XPATH, "//span[contains(text(),'CSV')]")
+            csv_btn.click()
+            time.sleep(5)
+            print("✅ CSV Downloaded")
+            return True
+        else:
+            print("⚠️ Download button found but not active.")
+            return False
     except:
-        print("❌ Failed to trigger download")
+        print("❌ No leads available or Download button not found.")
         return False
 
 def parse_and_distribute():
